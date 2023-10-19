@@ -2,7 +2,6 @@
 
 This is a guide to modifying Ergo's code. If you're just trying to run your own Ergo, or use one, you shouldn't need to worry about these issues.
 
-
 ## Golang issues
 
 You should use the [latest distribution of the Go language for your OS and architecture](https://golang.org/dl/). (If `uname -m` on your Raspberry Pi reports `armv7l`, use the `armv6l` distribution of Go; if it reports v8, you may be able to use the `arm64` distribution.)
@@ -15,13 +14,11 @@ If you're upgrading the Go version used by Ergo, there are several places where 
 2. `Dockerfile`, which controls the version that the Ergo binaries in our Docker images are built with
 3. `go.mod`: this should be updated automatically by Go when you do module-related operations
 
-
 ## Branches
 
 The recommended workflow for development is to create a new branch starting from the current `master`. Even though `master` is not recommended for production use, we strive to keep it in a usable state. Starting from `master` increases the likelihood that your patches will be accepted.
 
 Long-running feature branches that aren't ready for merge into `master` may be maintained under a `devel+` prefix, e.g. `devel+metadata` for a feature branch implementing the IRCv3 METADATA extension.
-
 
 ## Workflow
 
@@ -34,7 +31,6 @@ Barring special circumstances, both must pass for a PR to be accepted. irctest w
 
 The project style is [gofmt](https://go.dev/blog/gofmt); it is enforced by `make test`. You can fix any style issues automatically by running `make gofmt`.
 
-
 ## Updating dependencies
 
 Ergo vendors all dependencies using `go mod vendor`. To update a dependency, or add a new one:
@@ -43,7 +39,6 @@ Ergo vendors all dependencies using `go mod vendor`. To update a dependency, or 
 2. `go mod vendor` ; this writes the dependency's source files to the `vendor/` directory
 3. `git add go.mod go.sum vendor/` ; this stages all relevant changes to the vendor directory, including file deletions. Take care that spurious changes (such as editor swapfiles) aren't added.
 4. `git commit`
-
 
 ## Releasing a new version
 
@@ -63,16 +58,16 @@ Ergo vendors all dependencies using `go mod vendor`. To update a dependency, or 
 1. If it's a production release (as opposed to a release candidate), update the `stable` branch with the new changes. (This may be a force push in the event that stable contained a backport. This is fine because all stable releases and release candidates are tagged.)
 1. Similarly, for a production release, update the `irctest_stable` branch (this is the branch used by upstream irctest to integration-test against Ergo).
 1. Make the appropriate announcements:
-    * For a release candidate:
-        1. the channel topic
-        1. any operators who may be interested
-        1. update the testnet
-    * For a production release:
-        1. everything applicable to a release candidate
-        1. Twitter
-        1. ergo.chat/news
-        1. ircv3.net support tables, if applicable
-        1. other social media?
+   - For a release candidate:
+     1. the channel topic
+     1. any operators who may be interested
+     1. update the testnet
+   - For a production release:
+     1. everything applicable to a release candidate
+     1. Twitter
+     1. ergo.chat/news
+     1. ircv3.net support tables, if applicable
+     1. other social media?
 
 Once it's built and released, you need to setup the new development version. To do so:
 
@@ -84,6 +79,7 @@ Once it's built and released, you need to setup the new development version. To 
 
 ```md
 ## Unreleased
+
 New release of Ergo!
 
 ### Config Changes
@@ -99,18 +95,15 @@ New release of Ergo!
 ### Fixed
 ```
 
-
-
 ## Debugging
 
 It's helpful to enable all loglines while developing. Here's how to configure this:
 
 ```yaml
 logging:
-    -
-        method: stderr
-        type: "*"
-        level: debug
+  - method: stderr
+    type: "*"
+    level: debug
 ```
 
 To debug a hang, the best thing to do is to get a stack trace. The easiest way to get stack traces is with the [pprof listener](https://golang.org/pkg/net/http/pprof/), which can be enabled in the `debug` section of the config. Once it's enabled, you can navigate to `http://localhost:6060/debug/pprof/` in your browser and go from there. If that doesn't work, try:
@@ -118,7 +111,6 @@ To debug a hang, the best thing to do is to get a stack trace. The easiest way t
     $ kill -ABRT <procid>
 
 This will kill Ergo and print out a stack trace for you to take a look at.
-
 
 ## Concurrency design
 
@@ -129,7 +121,7 @@ Ergo involves a fair amount of shared state. Here are some of the main points:
 1. The server has a few of its own goroutines, for listening on sockets and handing off new client connections to their dedicated goroutines.
 1. A few tasks are done asynchronously in ad-hoc goroutines.
 
-In consequence, there is a lot of state (in particular, server and channel state) that can be read and written from multiple goroutines. This state is protected with mutexes. To avoid deadlocks, mutexes are arranged in "tiers"; while holding a mutex of one tier, you're only allowed to acquire mutexes of a strictly *higher* tier. The tiers are:
+In consequence, there is a lot of state (in particular, server and channel state) that can be read and written from multiple goroutines. This state is protected with mutexes. To avoid deadlocks, mutexes are arranged in "tiers"; while holding a mutex of one tier, you're only allowed to acquire mutexes of a strictly _higher_ tier. The tiers are:
 
 1. Tier 1 mutexes: these are the "innermost" mutexes. They typically protect getters and setters on objects, or invariants that are local to the state of a single object. Example: `Channel.stateMutex`.
 1. Tier 2 mutexes: these protect some invariants of their own, but also need to access fields on other objects that themselves require synchronization. Example: `ChannelManager.RWMutex`.
@@ -138,7 +130,6 @@ In consequence, there is a lot of state (in particular, server and channel state
 There are some mutexes that are "tier 0": anything in a subpackage of `irc` (e.g., `irc/logger` or `irc/connection_limits`) shouldn't acquire mutexes defined in `irc`.
 
 We are using `buntdb` for persistence; a `buntdb.DB` has an `RWMutex` inside it, with read-write transactions getting the `Lock()` and read-only transactions getting the `RLock()`. This mutex is considered tier 1. However, it's shared globally across all consumers, so if possible you should avoid acquiring it while holding ordinary application-level mutexes.
-
 
 ## Command handlers and ResponseBuffer
 
@@ -160,13 +151,11 @@ In order to allow this, in command handlers we don't send responses directly bac
 
 Basically, if you're in a command handler and you're sending a response back to the requesting client, use `rb.Add*` instead of `client.Send*`. Doing this makes sure the labeled responses feature above works as expected. The handling around `PRIVMSG`/`NOTICE`/`TAGMSG` is strange, so simply defer to [irctest](https://github.com/DanielOaks/irctest)'s judgement about whether that's correct for the most part.
 
-
 ## Translated strings
 
 The function `client.t()` is used fairly widely throughout the codebase. This function translates the given string using the client's negotiated language. If the parameter of the function is a string, the translation update script below will grab that string and mark it for translation.
 
 In addition, throughout most of the codebase, if a string is created using the backtick characters ``(`)``, that string will also be marked for translation. This is really useful in the cases of general errors and other strings that are created far away from the final `client.t` function they are sent through.
-
 
 ## Updating Translations
 
@@ -200,7 +189,6 @@ We also support grabbing translations directly from CrowdIn. To do this:
 4. Run `crowdin download`
 
 This will download a bunch of updated files and put them in the right place
-
 
 ## Adding a mode
 

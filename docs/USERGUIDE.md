@@ -1,19 +1,17 @@
-         __ __  ______ ___  ______ ___ 
+         __ __  ______ ___  ______ ___
       __/ // /_/ ____/ __ \/ ____/ __ \
      /_  // __/ __/ / /_/ / / __/ / / /
-    /_  // __/ /___/ _, _/ /_/ / /_/ / 
-     /_//_/ /_____/_/ |_|\____/\____/  
+    /_  // __/ /___/ _, _/ /_/ / /_/ /
+     /_//_/ /_____/_/ |_|\____/\____/
 
            Ergo IRCd User Guide
             https://ergo.chat/
 
 _Copyright © Daniel Oaks <daniel@danieloaks.net>, Shivaram Lingamneni <slingamn@cs.stanford.edu>_
 
+---
 
---------------------------------------------------------------------------------------------
-
-
- Table of Contents
+Table of Contents
 
 - [Introduction](#introduction)
 - [About IRC](#about-irc)
@@ -24,8 +22,7 @@ _Copyright © Daniel Oaks <daniel@danieloaks.net>, Shivaram Lingamneni <slingamn
 - [Multiclient](#multiclient)
 - [History](#history)
 
---------------------------------------------------------------------------------------------
-
+---
 
 # Introduction
 
@@ -43,23 +40,23 @@ Before continuing, you should be familiar with basic features of the IRC platfor
 
 Here are some guides covering the basics of IRC:
 
-* [Fedora Magazine: Beginner's Guide to IRC](https://fedoramagazine.org/beginners-guide-irc/)
-* [IRCHelp's IRC Tutorial](https://www.irchelp.org/faq/irctutorial.html) (in particular, section 3, "Beyond the Basics")
+- [Fedora Magazine: Beginner's Guide to IRC](https://fedoramagazine.org/beginners-guide-irc/)
+- [IRCHelp's IRC Tutorial](https://www.irchelp.org/faq/irctutorial.html) (in particular, section 3, "Beyond the Basics")
 
 # How Ergo is different
 
-Ergo differs in many ways from conventional IRC servers. If you're *not* familiar with other IRC servers, you may want to skip this section. Here are some of the most salient differences:
+Ergo differs in many ways from conventional IRC servers. If you're _not_ familiar with other IRC servers, you may want to skip this section. Here are some of the most salient differences:
 
-* Ergo integrates a "bouncer" into the server. In particular:
-    * Ergo stores message history for later retrieval.
-    * You can be "present" on the server (joined to channels, able to receive DMs) without having an active client connection to the server.
-    * Conversely, you can use multiple clients to view / control the same presence (nickname) on the server, as long as you authenticate with SASL when connecting.
-* Ergo integrates "services" into the server.  In particular:
-    * Nicknames are strictly reserved: once you've registered your nickname, you must log in in order to use it. Consequently, SASL is more important when using Ergo than in other systems.
-    * All properties of registered channels are protected without the need for `ChanServ` to be joined to the channel.
-* Ergo "cloaks", i.e., cryptographically scrambles, end user IPs so that they are not displayed publicly.
-* By default, the user/ident field is inoperative in Ergo: it is always set to `~u`, regardless of the `USER` command or the client's support for identd. This is because it is not in general a reliable or trustworthy way to distinguish users coming from the same IP. Ergo's integrated bouncer features should reduce the need for shared shell hosts and hosted bouncers (one of the main remaining use cases for identd).
-* By default, Ergo is only accessible via TLS.
+- Ergo integrates a "bouncer" into the server. In particular:
+  - Ergo stores message history for later retrieval.
+  - You can be "present" on the server (joined to channels, able to receive DMs) without having an active client connection to the server.
+  - Conversely, you can use multiple clients to view / control the same presence (nickname) on the server, as long as you authenticate with SASL when connecting.
+- Ergo integrates "services" into the server. In particular:
+  - Nicknames are strictly reserved: once you've registered your nickname, you must log in in order to use it. Consequently, SASL is more important when using Ergo than in other systems.
+  - All properties of registered channels are protected without the need for `ChanServ` to be joined to the channel.
+- Ergo "cloaks", i.e., cryptographically scrambles, end user IPs so that they are not displayed publicly.
+- By default, the user/ident field is inoperative in Ergo: it is always set to `~u`, regardless of the `USER` command or the client's support for identd. This is because it is not in general a reliable or trustworthy way to distinguish users coming from the same IP. Ergo's integrated bouncer features should reduce the need for shared shell hosts and hosted bouncers (one of the main remaining use cases for identd).
+- By default, Ergo is only accessible via TLS.
 
 # Account registration
 
@@ -106,9 +103,9 @@ Ergo stores message history on the server side (typically not an unlimited amoun
 1. The [IRCv3 chathistory specification](https://ircv3.net/specs/extensions/chathistory) offers the most fine-grained control over history replay. It is supported by [Gamja](https://git.sr.ht/~emersion/gamja), [Goguma](https://sr.ht/~emersion/goguma/), and [Kiwi IRC](https://github.com/kiwiirc/kiwiirc), and hopefully other clients soon.
 1. We emulate the [ZNC playback module](https://wiki.znc.in/Playback) for clients that support it. You may need to enable support for it explicitly in your client. For example, in [Textual](https://www.codeux.com/textual/), go to "Server properties", select "Vendor specific", uncheck "Do not automatically join channels on connect", and check "Only play back messages you missed". ZNC's wiki page covers other common clients (although if the feature is only supported via a script or third-party extension, the following option may be easier).
 1. If you set your client to always-on (see the previous section for details), you can set a "device ID" for each device you use. Ergo will then remember the last time your device was present on the server, and each time you sign on, it will attempt to replay exactly those messages you missed. There are a few ways to set your device ID when connecting:
-    - You can add it to your SASL username with an `@`, e.g., if your SASL username is `alice` you can send `alice@phone`
-    - You can add it in a similar way to your IRC protocol username ("ident"), e.g., `alice@phone`
-    - If login to user accounts via the `PASS` command is enabled on the server, you can provide it there, e.g., by sending `alice@phone:hunter2` as the server password
+   - You can add it to your SASL username with an `@`, e.g., if your SASL username is `alice` you can send `alice@phone`
+   - You can add it in a similar way to your IRC protocol username ("ident"), e.g., `alice@phone`
+   - If login to user accounts via the `PASS` command is enabled on the server, you can provide it there, e.g., by sending `alice@phone:hunter2` as the server password
 1. If you only have one device, you can set your client to be always-on and furthermore `/msg NickServ set autoreplay-missed true`. This will replay missed messages, with the caveat that you must be connecting with at most one client at a time.
 1. You can manually request history using `/history #channel 1h` (the parameter is either a message count or a time duration). (Depending on your client, you may need to use `/QUOTE history` instead.)
 1. You can autoreplay a fixed number of lines (e.g., 25) each time you join a channel using `/msg NickServ set autoreplay-lines 25`.

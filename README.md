@@ -2,10 +2,10 @@
 
 Ergo (formerly known as Oragono) is a modern IRC server written in Go. Its core design principles are:
 
-* Being simple to set up and use
-* Combining the features of an ircd, a services framework, and a bouncer (integrated account management, history storage, and bouncer functionality)
-* Bleeding-edge [IRCv3 support](https://ircv3.net/software/servers.html), suitable for use as an IRCv3 reference implementation
-* High customizability via a rehashable (i.e., reloadable at runtime) YAML config
+- Being simple to set up and use
+- Combining the features of an ircd, a services framework, and a bouncer (integrated account management, history storage, and bouncer functionality)
+- Bleeding-edge [IRCv3 support](https://ircv3.net/software/servers.html), suitable for use as an IRCv3 reference implementation
+- High customizability via a rehashable (i.e., reloadable at runtime) YAML config
 
 Ergo is a fork of the [Ergonomadic](https://github.com/jlatt/ergonomadic) IRC daemon <3
 
@@ -20,31 +20,30 @@ If you want to take a look at a running Ergo instance or test some client code, 
 
 ---
 
-
 ## Features
 
-* integrated services: NickServ for user accounts, ChanServ for channel registration, and HostServ for vanity hosts
-* bouncer-like features: storing and replaying history, allowing multiple clients to use the same nickname
-* native TLS/SSL support, including support for client certificates
-* [IRCv3 support](https://ircv3.net/software/servers.html)
-* [yaml](https://yaml.org/) configuration
-* updating server config and TLS certificates on-the-fly (rehashing)
-* SASL authentication
-* [LDAP support](https://github.com/ergochat/ergo-ldap)
-* supports [multiple languages](https://crowdin.com/project/ergochat) (you can also set a default language for your network)
-* optional support for UTF-8 nick and channel names with RFC 8265 (PRECIS)
-* advanced security and privacy features (support for requiring SASL for all logins, cloaking IPs, and running as a Tor hidden service)
-* an extensible privilege system for IRC operators
-* ident lookups for usernames
-* automated client connection limits
-* passwords stored with [bcrypt](https://godoc.org/golang.org/x/crypto)
-* `UBAN`, a unified ban system that can target IPs, networks, masks, and registered accounts (`KLINE` and `DLINE` are also supported)
-* a focus on developing with [specifications](https://ergo.chat/specs.html)
+- integrated services: NickServ for user accounts, ChanServ for channel registration, and HostServ for vanity hosts
+- bouncer-like features: storing and replaying history, allowing multiple clients to use the same nickname
+- native TLS/SSL support, including support for client certificates
+- [IRCv3 support](https://ircv3.net/software/servers.html)
+- [yaml](https://yaml.org/) configuration
+- updating server config and TLS certificates on-the-fly (rehashing)
+- SASL authentication
+- [LDAP support](https://github.com/ergochat/ergo-ldap)
+- supports [multiple languages](https://crowdin.com/project/ergochat) (you can also set a default language for your network)
+- optional support for UTF-8 nick and channel names with RFC 8265 (PRECIS)
+- advanced security and privacy features (support for requiring SASL for all logins, cloaking IPs, and running as a Tor hidden service)
+- an extensible privilege system for IRC operators
+- ident lookups for usernames
+- automated client connection limits
+- passwords stored with [bcrypt](https://godoc.org/golang.org/x/crypto)
+- `UBAN`, a unified ban system that can target IPs, networks, masks, and registered accounts (`KLINE` and `DLINE` are also supported)
+- a focus on developing with [specifications](https://ergo.chat/specs.html)
 
 For more detailed information on Ergo's functionality, see:
 
-* [MANUAL.md, the operator manual](https://github.com/ergochat/ergo/blob/stable/docs/MANUAL.md)
-* [USERGUIDE.md, the guide for end users](https://github.com/ergochat/ergo/blob/stable/docs/USERGUIDE.md)
+- [MANUAL.md, the operator manual](https://github.com/ergochat/ergo/blob/stable/docs/MANUAL.md)
+- [USERGUIDE.md, the guide for end users](https://github.com/ergochat/ergo/blob/stable/docs/USERGUIDE.md)
 
 ## Quick start guide
 
@@ -65,8 +64,8 @@ vim ircd.yaml  # modify the config file to your liking
 
 Some platforms/distros also have Ergo packages maintained for them:
 
-* Arch Linux [AUR](https://aur.archlinux.org/packages/ergochat/) - Maintained by [Jason Papakostas (@vith)](https://github.com/vith).
-* [Gentoo Linux](https://packages.gentoo.org/packages/net-irc/ergo) - Maintained by [Sam James (@thesamesam)](https://github.com/thesamesam).
+- Arch Linux [AUR](https://aur.archlinux.org/packages/ergochat/) - Maintained by [Jason Papakostas (@vith)](https://github.com/vith).
+- [Gentoo Linux](https://packages.gentoo.org/packages/net-irc/ergo) - Maintained by [Sam James (@thesamesam)](https://github.com/thesamesam).
 
 ### Using Docker
 
@@ -117,11 +116,10 @@ Once you have registered your nickname, you can use it to register channels:
 
 After this, your channel will remember the fact that you're the owner, the topic, and any modes set on it!
 
-
 # Credits
 
-* Jeremy Latt (2012-2014)
-* Edmund Huber (2014-2015)
-* Daniel Oaks (2016-present)
-* Shivaram Lingamneni (2017-present)
-* [Many other contributors and friends of the project <3](https://github.com/ergochat/ergo/blob/master/CHANGELOG.md)
+- Jeremy Latt (2012-2014)
+- Edmund Huber (2014-2015)
+- Daniel Oaks (2016-present)
+- Shivaram Lingamneni (2017-present)
+- [Many other contributors and friends of the project <3](https://github.com/ergochat/ergo/blob/master/CHANGELOG.md)

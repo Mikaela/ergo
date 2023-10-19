@@ -1,4 +1,4 @@
-name: 'ghcr'
+name: "ghcr"
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - "master"
       - "stable"
     tags:
-      - 'v*'
+      - "v*"
 
 env:
   REGISTRY: ghcr.io

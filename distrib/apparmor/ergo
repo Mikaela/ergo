@@ -25,7 +25,7 @@ profile ergo /usr/bin/ergo {
 profile ergo-ldap /usr/bin/ergo-ldap {
   include <abstractions/openssl>
   include <abstractions/ssl_certs>
-  
+
   /usr/bin/ergo-ldap rm,
   /etc/ergo/ldap.yaml r,
 

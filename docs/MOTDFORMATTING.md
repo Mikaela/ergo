@@ -17,20 +17,19 @@ after it is formatted in the given way. Here are the character pairs and what th
        $r   | Reset
     --------------------------
 
-
 ## Color codes
 
 After the color code (`$c`), you can use square brackets to specify which foreground and
 background colors to output. For example:
 
 This line outputs red text:
-    `This is $c[red]really cool text!`
+`This is $c[red]really cool text!`
 
 This line outputs red text with a light blue background:
-    `This is $c[red,light blue]22% cooler!`
+`This is $c[red,light blue]22% cooler!`
 
 If you're familiar with IRC colors you can also use the raw numbers you're used to:
-    `This is $c13pink text`
+`This is $c13pink text`
 
 Here are the color names we support, and which IRC colors they map to:
 
